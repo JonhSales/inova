@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/src/pages/Home.module.css"],"sourcesContent":[".container {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    justify-content: center;\r\n    min-height: 100vh;\r\n    background-color: #f0f0f0; /* Ajuste conforme sua paleta de cores */\r\n}\r\n\r\n.buttonContainer {\r\n    margin-top: 20px;\r\n    display: flex;\r\n    flex-direction: column; /* Coloca os botões em coluna, ajuste para row se necessário */\r\n    gap: 10px; /* Espaço entre os botões */\r\n}\r\n"],"names":[],"mappings":"AAAA;;;;;;;;;AASA"}},
-    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}

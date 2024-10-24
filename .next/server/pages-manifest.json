@@ -1,8 +1,0 @@
-{
-  "/_app": "pages/_app.js",
-  "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/_error": "pages/_error.js",
-  "/cadastro-oficina": "pages/cadastro-oficina.js",
-  "/cadastro-cliente": "pages/cadastro-cliente.js"
-}
