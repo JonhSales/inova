@@ -1,0 +1,41 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Workshop {
+  id            Int      @id @default(autoincrement())
+  name          String
+  cnpj          String
+  cpf           String
+  location      String
+  services      String
+  hours         String
+  paymentMethods String
+  createdAt     DateTime @default(now())
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  cpf       String
+  name      String
+  phone     String
+  email     String @unique
+  address   String
+  vehicles  Vehicle[]
+  createdAt DateTime @default(now())
+}
+
+model Vehicle {
+  id          Int      @id @default(autoincrement())
+  plate       String
+  model       String
+  year        Int
+  customerId  Int
+  Customer    Customer @relation(fields: [customerId], references: [id])
+  createdAt   DateTime @default(now())
+}
