@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Checkbox, Button, TextField, FormControlLabel, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { Checkbox, Button, TextField, FormControlLabel, MenuItem, Select, InputLabel, FormControl, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import InputMask from 'react-input-mask';
 
 const OfficeRegistrationForm = () => {
   const router = useRouter();
-  
-  // Estados para os campos
+
+  // Estados para campos
   const [paymentMethods, setPaymentMethods] = useState({
     cash: false,
     debit: false,
@@ -13,8 +14,29 @@ const OfficeRegistrationForm = () => {
     pix: false,
   });
   const [serviceType, setServiceType] = useState('');
+  const [servicesOffered, setServicesOffered] = useState([]);
   const [acceptScheduling, setAcceptScheduling] = useState(false);
-  
+
+  // Serviços disponíveis para seleção
+  const services = {
+    mecanica: [
+      'Manutenção Preventiva', 'Serviços de Freios', 'Suspensão e Direção', 
+      'Diagnóstico e Reparo de Motor', 'Serviços de Transmissão', 'Serviços Elétricos', 
+      'Serviços de Ar-condicionado', 'Troca de Pneus', 'Lataria e Pintura', 
+      'Troca e Reparo de Vidros', 'Serviços de Inspeção e Emissão de Laudos', 
+      'Socorro e Reboque'
+    ],
+    lava_jato: [
+      'Lavagem Externa Simples', 'Lavagem Completa', 'Lavagem a Seco', 'Lavagem de Motor', 
+      'Higienização Interna', 'Hidratação de Bancos de Couro', 'Polimento', 'Enceramento', 
+      'Cristalização ou Espelhamento', 'Vitrificação de Pintura', 'Descontaminação da Pintura', 
+      'Limpeza de Estofados e Tapetes', 'Impermeabilização de Estofados', 'Desodorização ou Odorização', 
+      'Revitalização de Plásticos e Borrachas', 'Lavagem de Rodas e Pneus', 'Envelopamento de Veículos', 
+      'Remoção de Piche e Insetos', 'Limpeza de Vidros e Para-brisas', 'Aplicação de Anti-chuva', 
+      'Serviços de Polimento de Faróis'
+    ],
+  };
+
   const handlePaymentChange = (event) => {
     setPaymentMethods({
       ...paymentMethods,
@@ -22,28 +44,34 @@ const OfficeRegistrationForm = () => {
     });
   };
 
+  const handleServiceTypeChange = (event) => {
+    setServiceType(event.target.value);
+    setServicesOffered([]); // Limpa os serviços quando o tipo de serviço muda
+  };
+
+  const handleServiceOfferedChange = (event) => {
+    const value = event.target.value;
+    setServicesOffered(
+      typeof value === 'string' ? value.split(',') : value
+    );
+  };
+
   const handleCancel = () => {
     router.push('/'); // Redireciona para a página inicial
   };
 
-  const handleServiceTypeChange = (event) => {
-    setServiceType(event.target.value);
-  };
-
   const handleSubmit = (event) => {
-    event.preventDefault(); // Previna o comportamento padrão do formulário
-    // Aqui você pode adicionar a lógica para salvar os dados
-
+    event.preventDefault();
     // Após a submissão dos dados da oficina, redirecionar para o reconhecimento facial
     router.push('/ReconhecimentoFacial');
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
-      <h2>Cadastro de Oficina</h2>
+    <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
+      <h2>Cadastro de Prestador de Serviço</h2>
 
       <form onSubmit={handleSubmit}>
-        {/* Tipo de Serviço Prestado */}
+        {/* Tipo de Serviço */}
         <FormControl fullWidth margin="normal">
           <InputLabel id="service-type-label">Tipo de Serviço Prestado</InputLabel>
           <Select
@@ -53,23 +81,46 @@ const OfficeRegistrationForm = () => {
             label="Tipo de Serviço Prestado"
             onChange={handleServiceTypeChange}
           >
-            <MenuItem value="mecanica">Mecânica</MenuItem>
-            <MenuItem value="auto_eletrica">Auto Elétrica</MenuItem>
-            <MenuItem value="borracharia">Borracharia</MenuItem>
-            <MenuItem value="reboque">Reboque</MenuItem>
+            <MenuItem value="mecanica">Oficina Mecânica</MenuItem>
             <MenuItem value="lava_jato">Lava-Jato</MenuItem>
           </Select>
         </FormControl>
 
-        {/* Nome da Oficina */}
+        {/* Nome do Prestador */}
         <TextField label="Nome" fullWidth margin="normal" required />
 
-        {/* CNPJ e CPF */}
-        <TextField label="CNPJ" fullWidth margin="normal" required />
-        <TextField label="CPF do Responsável" fullWidth margin="normal" required />
+        {/* CNPJ e CPF do responsável */}
+        <InputMask mask="99.999.999/9999-99">
+          {() => (
+            <TextField label="CNPJ" fullWidth margin="normal" required />
+          )}
+        </InputMask>
 
-        {/* Endereço */}
-        <TextField label="Endereço" fullWidth margin="normal" helperText="Você pode usar sua localização atual." required />
+        <InputMask mask="999.999.999-99">
+          {() => (
+            <TextField label="CPF do Responsável" fullWidth margin="normal" required />
+          )}
+        </InputMask>
+
+        {/* Número de Funcionários */}
+        <TextField label="Número de Funcionários" type="number" fullWidth margin="normal" required />
+
+        {/* Email */}
+        <TextField label="E-mail" fullWidth margin="normal" required />
+
+        {/* Senha e Confirmação de Senha */}
+        <TextField label="Senha" type="password" fullWidth margin="normal" required />
+        <TextField label="Confirmar Senha" type="password" fullWidth margin="normal" required />
+
+        {/* Endereço Completo */}
+        <TextField label="CEP" fullWidth margin="normal" required />
+        <TextField label="Logradouro" fullWidth margin="normal" required />
+        <TextField label="Cidade" fullWidth margin="normal" required />
+        <TextField label="Estado" fullWidth margin="normal" required />
+        <TextField label="País" fullWidth margin="normal" required />
+
+        {/* Localização Atual */}
+        <TextField label="Endereço (usar localização atual)" fullWidth margin="normal" required />
 
         {/* Horário de Funcionamento */}
         <div>
@@ -88,6 +139,28 @@ const OfficeRegistrationForm = () => {
           }
           label="Aceita Agendamento de Serviço"
         />
+
+        {/* Escolha dos Serviços Oferecidos */}
+        {serviceType && (
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="services-offered-label">Serviços Oferecidos</InputLabel>
+            <Select
+              labelId="services-offered-label"
+              id="services-offered"
+              multiple
+              value={servicesOffered}
+              onChange={handleServiceOfferedChange}
+              renderValue={(selected) => selected.join(', ')}
+            >
+              {services[serviceType]?.map((service) => (
+                <MenuItem key={service} value={service}>
+                  <Checkbox checked={servicesOffered.indexOf(service) > -1} />
+                  {service}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
 
         {/* Formas de Pagamento */}
         <div>
@@ -116,7 +189,7 @@ const OfficeRegistrationForm = () => {
             Cancelar
           </Button>
           <Button variant="contained" color="primary" type="submit">
-            Cadastrar
+            Cadastrar e Continuar
           </Button>
         </div>
       </form>
@@ -125,3 +198,4 @@ const OfficeRegistrationForm = () => {
 };
 
 export default OfficeRegistrationForm;
+
